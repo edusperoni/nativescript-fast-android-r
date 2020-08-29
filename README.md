@@ -14,17 +14,17 @@ tns plugin add nativescript-fast-android-r
 
 To use this plugin, simply import `androidR` and use it like you'd use `android.R`
 	
-	```typescript
-    import { androidR } from "nativescript-fast-android-r";
-    console.log(androidR.integer.config_longAnimTime);
-    ```
+```typescript
+import { androidR } from "nativescript-fast-android-r";
+console.log(androidR.integer.config_longAnimTime);
+```
 
 
 ## Peformance
 
 Querying `android.R` for the first time takes usually from 400-800ms, and a negligible time from then onwards.
 
-```
+```typescript
 console.log(android.R.integer.config_longAnimTime); // 400-800ms
 console.log(android.R.integer.config_longAnimTime); // ~0ms
 console.log(android.R.integer.config_shortAnimTime); // ~0ms
@@ -35,7 +35,7 @@ console.log(android.R.transition.explode); // ~0ms
 
 `fast-android-r` caches all classes and values that are queried. The first query usually takes <5ms. Subsequent queries to the same value will take negligible time (O(1) lookup). First time queries to other fields/classes usually take <2ms.
 
-```
+```typescript
 console.log(androidR.integer.config_longAnimTime); // 0-4ms
 console.log(androidR.integer.config_longAnimTime); // ~0ms
 console.log(androidR.integer.config_shortAnimTime); // 0-2ms
