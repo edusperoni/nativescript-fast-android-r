@@ -1,5 +1,8 @@
-import { Common } from './fast-android-r.common';
 
-export class FastAndroidR extends Common {
+const classHandler = {
+    get: function (object: { [className: string]: { [property: string]: number } }, property: string) {
+        throw new Error("android.R isn't present on iOS");
+    }
+};
 
-}
+export const androidR = new Proxy<{ [className: string]: { [field: string]: number } }>({}, classHandler);

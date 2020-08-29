@@ -1,12 +1,25 @@
-<Page
-    navigatingTo="onNavigatingTo" 
+<Page navigatingTo="onNavigatingTo"
     xmlns="http://schemas.nativescript.org/tns.xsd">
-    
+
     <ActionBar>
         <Label text="Home"></Label>
     </ActionBar>
 
-    <GridLayout>
-        <!-- Add your page content here -->
-    </GridLayout>
+    <ScrollView>
+        <StackLayout>
+            <GridLayout rows="auto" columns="*,*">
+                <ListPicker col="0" items="{{ rClasses }}" selectedIndex="{{classSelectedIndex}}" loaded="{{onClassListPickerLoaded}}" />
+                <ListPicker col="1" items="{{ currentRFields }}" selectedIndex="{{fieldSelectedIndex}}" loaded="onListPickerLoaded" />
+            </GridLayout>
+            <Button text="Get value from Android.R" tap="{{ androidRload }}"></Button>
+            <Label text="{{ 'Time to get value: ' + (androidRtimeToLoad !== undefined ? androidRtimeToLoad + 'ms' : '') }}"></Label>
+            <Label text="{{ 'Value: ' + (androidRval !== undefined ? androidRval : '') }}"></Label>
+
+            <Button text="Get value from Fast Android.R" tap="{{ fastAndroidRload }}"></Button>
+            <Label text="{{ 'Time to get value: ' + (fastAndroidRtimeToLoad !== undefined ? fastAndroidRtimeToLoad + 'ms' : '') }}"></Label>
+            <Label text="{{ 'Value: ' + (fastAndroidRval !== undefined ? fastAndroidRval : '') }}"></Label>
+            <!-- Add your page content here -->
+            <Button text="Refresh Android R values" tap="{{ remapAndroidR }}"></Button>
+        </StackLayout>
+    </ScrollView>
 </Page>
