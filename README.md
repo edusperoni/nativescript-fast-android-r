@@ -1,18 +1,10 @@
 # nativescript-fast-android-r
 
-Add your plugin badges here. See [nativescript-urlhandler](https://github.com/hypery2k/nativescript-urlhandler) for example.
+In {N}, querying `android.R`, like using `android.R.integer.config_longAnimTime`, will cause an UI lag for over 500ms the first time it's called. `R` is a big class with many child static classes, so yhis slowdown may be because {N} loads all the `R` class metadata at runtime.
 
-Then describe what's the purpose of your plugin. 
-
-In case you develop UI plugin, this is where you can add some screenshots.
-
-## (Optional) Prerequisites / Requirements
-
-Describe the prerequisites that the user need to have installed before using your plugin. See [nativescript-firebase plugin](https://github.com/eddyverbruggen/nativescript-plugin-firebase) for example.
+This plugin provides the proxy object `androidR` that uses [Reflection](https://docs.oracle.com/javase/8/docs/technotes/guides/reflection/index.html) to query the static class `integer` and field `config_longAnimTime` to return the value.
 
 ## Installation
-
-Describe your plugin installation steps. Ideally it would be something like:
 
 ```javascript
 tns plugin add nativescript-fast-android-r
@@ -20,20 +12,42 @@ tns plugin add nativescript-fast-android-r
 
 ## Usage 
 
-Describe any usage specifics for your plugin. Give examples for Android, iOS, Angular if needed. See [nativescript-drop-down](https://www.npmjs.com/package/nativescript-drop-down) for example.
+To use this plugin, simply import `androidR` and use it like you'd use `android.R`
 	
-	```javascript
-    Usage code snippets here
-    ```)
+	```typescript
+    import { androidR } from "nativescript-fast-android-r";
+    console.log(androidR.integer.config_longAnimTime);
+    ```
 
-## API
 
-Describe your plugin methods and properties here. See [nativescript-feedback](https://github.com/EddyVerbruggen/nativescript-feedback) for example.
-    
-| Property | Default | Description |
-| --- | --- | --- |
-| some property | property default value | property description, default values, etc.. |
-| another property | property default value | property description, default values, etc.. |
+## Peformance
+
+Querying `android.R` for the first time takes usually from 400-800ms, and a negligible time from then onwards.
+
+```
+console.log(android.R.integer.config_longAnimTime); // 400-800ms
+console.log(android.R.integer.config_longAnimTime); // ~0ms
+console.log(android.R.integer.config_shortAnimTime); // ~0ms
+console.log(android.R.integer.config_shortAnimTime); // ~0ms
+console.log(android.R.transition.explode); // ~0ms
+console.log(android.R.transition.explode); // ~0ms
+```
+
+`fast-android-r` caches all classes and values that are queried. The first query usually takes <5ms. Subsequent queries to the same value will take negligible time (O(1) lookup). First time queries to other fields/classes usually take <2ms.
+
+```
+console.log(androidR.integer.config_longAnimTime); // 0-4ms
+console.log(androidR.integer.config_longAnimTime); // ~0ms
+console.log(androidR.integer.config_shortAnimTime); // 0-2ms
+console.log(androidR.integer.config_shortAnimTime); // ~0ms
+console.log(androidR.transition.explode); // 0-4ms
+console.log(androidR.transition.explode); // ~0ms
+```
+
+### Future possibilities
+
+WAlthough some values from the `R` class are dynamic (e.g.: resources, strings, etc), most of them are not (`integer.config_longAnimTime`, `integer.config_longAnimTime` and others defined in the [documentation](https://developer.android.com/reference/android/R)). It may be benefitial to preload immutable values into the cache while allowing "dynamic" values to be queried.
+
     
 ## License
 
