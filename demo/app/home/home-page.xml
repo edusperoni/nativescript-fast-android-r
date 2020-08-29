@@ -11,6 +11,7 @@
                 <ListPicker col="0" items="{{ rClasses }}" selectedIndex="{{classSelectedIndex}}" loaded="{{onClassListPickerLoaded}}" />
                 <ListPicker col="1" items="{{ currentRFields }}" selectedIndex="{{fieldSelectedIndex}}" loaded="onListPickerLoaded" />
             </GridLayout>
+            <Label text="{{ classname }}" horizontalAlignment="center"></Label>
             <Button text="Get value from Android.R" tap="{{ androidRload }}"></Button>
             <Label text="{{ 'Time to get value: ' + (androidRtimeToLoad !== undefined ? androidRtimeToLoad + 'ms' : '') }}"></Label>
             <Label text="{{ 'Value: ' + (androidRval !== undefined ? androidRval : '') }}"></Label>

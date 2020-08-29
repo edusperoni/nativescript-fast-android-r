@@ -12,7 +12,20 @@ export class HomeViewModel extends Observable {
     fieldSelectedIndex = 0;
     rClasses = ["config_longAnimTime", "config_shortAnimTime"];
     rFields = [["a"], ["b"]];
+    get currentClassName() {
+        if (this.classSelectedIndex > this.rClasses.length) {
+            return "";
+        }
+        return this.rClasses[this.classSelectedIndex];
+    }
+    get currentFieldName() {
+        if(this.classSelectedIndex > this.rFields.length || this.fieldSelectedIndex > this.rFields[this.classSelectedIndex].length) {
+            return "";
+        }
+        return this.rFields[this.classSelectedIndex][this.fieldSelectedIndex];
+    }
     currentRFields = this.rFields[this.classSelectedIndex];
+    classname = "android.R.";
     constructor() {
         super();
         this.remapAndroidR();
@@ -20,8 +33,15 @@ export class HomeViewModel extends Observable {
             if(v.propertyName === "classSelectedIndex") {
                 this.setCurrentRFields(v.value);
             }
+            if (v.propertyName === "classSelectedIndex" || v.propertyName === "fieldSelectedIndex") {
+                this.updatePropertyName();
+            }
         });
         this.set("classSelectedIndex", this.rClasses.indexOf("integer"));
+    }
+
+    updatePropertyName() {
+        this.set("classname", `android.R.${this.currentClassName}.${this.currentFieldName}`);
     }
 
     onClassListPickerLoaded(evt) {
@@ -31,7 +51,7 @@ export class HomeViewModel extends Observable {
     }
 
     setCurrentRFields(currentClass: number) {
-        currentClass = currentClass < this.rFields.length ?currentClass : 0;
+        currentClass = currentClass < this.rFields.length ? currentClass : 0;
         this.set('fieldSelectedIndex', 0);
         this.set("currentRFields", this.rFields[currentClass]);
     }
@@ -40,7 +60,6 @@ export class HomeViewModel extends Observable {
         const startTime = time();
         this.set("androidRval", android.R[this.rClasses[this.classSelectedIndex]][this.rFields[this.classSelectedIndex][this.fieldSelectedIndex]]);
         this.set("androidRtimeToLoad", time() - startTime);
-        console.log(java.lang.Class.forName("android.R").getClasses());
     }
 
     fastAndroidRload() {
