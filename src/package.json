@@ -29,12 +29,11 @@
 	"keywords": [
 		"NativeScript",
 		"JavaScript",
-		"Android",
-		"iOS"
+		"Android"
 	],
 	"author": {
-		"name": "Your Name",
-		"email": "youremail@yourdomain.com"
+		"name": "Eduardo Speroni",
+		"email": "edusperoni@gmail.com"
 	},
 	"bugs": {
 		"url": "https://github.com/edusperoni/nativescript-fast-android-r/issues"
