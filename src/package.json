@@ -16,7 +16,7 @@
 	"scripts": {
 		"tsc": "npm i && tsc",
 		"build": "npm run tsc",
-		"build.native": "node scripts/build-native.js",
+		"build.native": "echo 'nothing to build'",
 		"tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
 		"ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
 		"prepack": "npm run build.native",
