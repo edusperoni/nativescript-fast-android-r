@@ -1,4 +1,5 @@
 import { Observable, PropertyChangeData } from "tns-core-modules/data/observable";
+import { Application } from "@nativescript/core";
 import { time } from "tns-core-modules/profiling";
 import { androidR } from "nativescript-fast-android-r";
 
@@ -58,7 +59,8 @@ export class HomeViewModel extends Observable {
 
     androidRload() {
         const startTime = time();
-        this.set("androidRval", android.R[this.rClasses[this.classSelectedIndex]][this.rFields[this.classSelectedIndex][this.fieldSelectedIndex]]);
+        const p = eval(Application.android && Application.android.packageName || "android");
+        this.set("androidRval", p.R[this.rClasses[this.classSelectedIndex]][this.rFields[this.classSelectedIndex][this.fieldSelectedIndex]]);
         this.set("androidRtimeToLoad", time() - startTime);
     }
 
@@ -69,8 +71,9 @@ export class HomeViewModel extends Observable {
     }
 
     remapAndroidR() {
+        const packageName = Application.android && Application.android.packageName || "android";
         const fields = [];
-        const classes = Array.from(java.lang.Class.forName("android.R").getClasses()).map((v) => {
+        const classes = Array.from(java.lang.Class.forName( packageName + ".R").getClasses()).map((v) => {
             fields.push(Array.from(java.lang.Class.forName(v.getName()).getFields()).map((v) => v.getName()));
             return v.getName().split("$")[1];
         });

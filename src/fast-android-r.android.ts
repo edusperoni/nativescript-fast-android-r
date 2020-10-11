@@ -1,7 +1,7 @@
-
+import { Application } from "@nativescript/core";
 const classHandler = {
     get: function (object: { [className: string]: { [property: string]: number } }, property: string) {
-        const className = "android.R$" + property;
+        const className = (Application.android.packageName || "android") + ".R$" + property;
         if (!object.hasOwnProperty(property)) {
             try {
                 object[property] = new Proxy({ __parentClass: java.lang.Class.forName(className) }, methodHandler);
